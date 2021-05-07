@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', init)
 document.addEventListener('wheel', onScroll)
+window.addEventListener('resize', resize)
 
 function init() {
   const container = document.getElementById('turtles')
@@ -12,6 +13,28 @@ function init() {
     turtle.classList.add('turtle')
     turtle.textContent = '🐢'
     turtle.style.top = `${(i - 1) * turtleHeight}px`
+
+    container.appendChild(turtle)
+  }
+}
+
+function resize() {
+  const container = document.getElementById('turtles')
+  const viewPortHeight = window.innerHeight
+  const turtleHeight = parseFloat(getComputedStyle(document.body).fontSize)
+  amountOfTurtles = Math.ceil(viewPortHeight / turtleHeight) + 1
+  const currentAmountOfTurtles = document.querySelectorAll('.turtle').length
+
+  if (amountOfTurtles <= currentAmountOfTurtles) {
+    return
+  }
+
+  for (let i = currentAmountOfTurtles; i < amountOfTurtles; i++) {
+    const lastTurtle = document.querySelector('.turtle:last-of-type')
+    const turtle = document.createElement('div')
+    turtle.classList.add('turtle')
+    turtle.textContent = '🐢'
+    turtle.style.top = `${getHeight(lastTurtle) + turtleHeight}px`
 
     container.appendChild(turtle)
   }
