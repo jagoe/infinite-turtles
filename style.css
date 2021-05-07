@@ -1,0 +1,12 @@
+body {
+  background: rgb(31, 31, 31);
+  font-size: 8em;
+  overflow-y: hidden;
+}
+
+.turtle {
+  position: absolute;
+  left: calc(50% - 0.5em);
+  text-align: center;
+  cursor: default;
+}
