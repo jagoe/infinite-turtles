@@ -26,6 +26,11 @@ function resize() {
   const currentAmountOfTurtles = document.querySelectorAll('.turtle').length
 
   if (amountOfTurtles <= currentAmountOfTurtles) {
+    document.querySelectorAll('.turtle').forEach((turtle, i) => {
+      if (i > amountOfTurtles - 1) {
+        turtle.remove()
+      }
+    })
     return
   }
 
