@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: infinite-turtles
+  name: infinite-turtles
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: infinite-turtles
+  template:
+    metadata:
+      labels:
+        app: infinite-turtles
+    spec:
+      containers:
+        - image: jagoe/infinite-turtles:latest
+          name: infinite-turtles
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 100Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: infinite-turtles
+  labels:
+    app: infinite-turtles
+spec:
+  ports:
+    - name: http
+      port: 80
+  selector:
+    app: infinite-turtles
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: infinite-turtles
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: lets-encrypt
+    cert-manager.io/acme-challenge-type: http01
+    acme.cert-manager.io/http01-edit-in-place: "true"
+    cert-manager.io/issue-temporary-certificate: "true"
+  labels:
+    app: infinite-turtles
+spec:
+  rules:
+    - host: infinite-turtles.dev
+      http:
+        paths:
+          - backend:
+              service:
+                name: infinite-turtles
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - infinite-turtles.dev
+      secretName: infinite-turtles-tls
