@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', init)
 document.addEventListener('wheel', onScroll)
+document.addEventListener('touchmove', onScroll) // not working
 window.addEventListener('resize', resize)
 
 function init() {
@@ -46,10 +47,13 @@ function resize() {
 }
 
 function onScroll(event) {
+  const deltaY = -Math.min(event.deltaY, 100) // large deltaY cause problems and 100 is sufficiently fast
+  if (deltaY > 0) {
+    return
+  }
   const container = document.getElementById('turtles')
   const viewPortHeight = window.innerHeight
   const turtleHeight = parseFloat(getComputedStyle(document.body).fontSize)
-  const deltaY = Math.min(event.deltaY, 100) // large deltaY cause problems and 100 is sufficiently fast
 
   document.querySelectorAll('.turtle').forEach((turtle) => {
     const top = getHeight(turtle)
